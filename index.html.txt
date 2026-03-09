@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HorizonBoost | Book a Strategy Call</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f6f7fb;
+margin:0;
+}
+
+.wrapper{
+max-width:900px;
+margin:auto;
+margin-top:60px;
+background:white;
+display:flex;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+border-radius:10px;
+overflow:hidden;
+}
+
+.left{
+width:40%;
+background:#1b1f58;
+color:white;
+padding:40px;
+}
+
+.left h1{
+margin-top:0;
+}
+
+.right{
+width:60%;
+padding:40px;
+}
+
+.date-picker{
+margin-bottom:20px;
+}
+
+.slot-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.slot{
+border:1px solid #4b81e8;
+padding:12px;
+text-align:center;
+cursor:pointer;
+border-radius:6px;
+}
+
+.slot:hover{
+background:#4b81e8;
+color:white;
+}
+
+.form{
+margin-top:20px;
+display:none;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:4px;
+}
+
+button{
+background:#1b1f58;
+color:white;
+padding:12px;
+border:none;
+width:100%;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#4b81e8;
+}
+
+@media(max-width:800px){
+.wrapper{
+flex-direction:column;
+}
+.left,.right{
+width:100%;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="left">
+
+<h1>HorizonBoost</h1>
+
+<h3>1:1 Strategy Call</h3>
+
+<p>Duration: 45 Minutes</p>
+
+<p>
+We'll review your business and discuss growth strategies,
+marketing systems, and scaling opportunities.
+</p>
+
+<p><b>Timezone:</b> Eastern Time</p>
+
+</div>
+
+<div class="right">
+
+<h2>Select a Date</h2>
+
+<input type="date" id="date" class="date-picker">
+
+<h2>Select a Time</h2>
+
+<div class="slot-grid" id="slots"></div>
+
+<div class="form" id="form">
+
+<h3>Your Details</h3>
+
+<input placeholder="Full Name" id="name">
+
+<input placeholder="Business Name" id="business">
+
+<input placeholder="Email Address" id="email">
+
+<input placeholder="Phone Number" id="phone">
+
+<p id="chosen"></p>
+
+<button onclick="submitBooking()">Request Call</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const times=[
+"9:00 AM","9:45 AM","10:30 AM","11:15 AM",
+"12:00 PM","12:45 PM","1:30 PM","2:15 PM",
+"3:00 PM","3:45 PM","4:30 PM","5:15 PM"
+]
+
+const slots=document.getElementById("slots")
+
+times.forEach(t=>{
+
+let div=document.createElement("div")
+
+div.className="slot"
+
+div.innerText=t
+
+div.onclick=()=>{
+
+document.getElementById("form").style.display="block"
+
+document.getElementById("chosen").innerText="Selected: "+t
+
+localStorage.setItem("time",t)
+
+}
+
+slots.appendChild(div)
+
+})
+
+function submitBooking(){
+
+let booking={
+
+name:document.getElementById("name").value,
+business:document.getElementById("business").value,
+email:document.getElementById("email").value,
+phone:document.getElementById("phone").value,
+date:document.getElementById("date").value,
+time:localStorage.getItem("time"),
+status:"Pending"
+
+}
+
+let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
+
+bookings.push(booking)
+
+localStorage.setItem("bookings",JSON.stringify(bookings))
+
+alert("Your request has been sent!")
+
+location.reload()
+
+}
+
+</script>
+
+</body>
+</html>

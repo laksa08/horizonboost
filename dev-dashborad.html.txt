@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HorizonBoost Dev Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:40px;
+background:#f4f6fb;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td,th{
+padding:10px;
+border:1px solid #ccc;
+}
+
+button{
+padding:6px 10px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>HorizonBoost Dev Dashboard</h1>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Business</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="table"></tbody>
+
+</table>
+
+
+<script>
+
+const DEV_EMAILS=["aw060554@gmail.com"]
+
+let email=prompt("Enter dev email")
+
+if(!DEV_EMAILS.includes(email)){
+alert("Access denied")
+window.location="index.html"
+}
+
+
+const table=document.getElementById("table")
+
+let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
+
+function render(){
+
+table.innerHTML=""
+
+bookings.forEach((b,i)=>{
+
+const row=`
+<tr>
+<td>${b.name}</td>
+<td>${b.business}</td>
+<td>${b.email}</td>
+<td>${b.phone}</td>
+<td>${b.time}</td>
+<td>${b.status}</td>
+<td><button onclick="book(${i})">Mark Booked</button></td>
+</tr>
+`
+
+table.innerHTML+=row
+
+})
+
+}
+
+function book(i){
+
+bookings[i].status="Booked"
+
+localStorage.setItem("bookings",JSON.stringify(bookings))
+
+render()
+
+}
+
+render()
+
+</script>
+
+</body>
+
+</html>
