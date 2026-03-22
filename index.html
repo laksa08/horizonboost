@@ -8,19 +8,29 @@
 <style>
 
 body{
-<div style="background:#1b1f58;padding:15px;color:white;">
-  <a href="index.html" style="color:white;margin-right:20px;">Home</a>
-  <a href="dev-dashboard.html" style="color:white;">Dev Dashboard</a>
-</div>
 font-family:Arial;
 background:#f6f7fb;
 margin:0;
 }
 
+/* NAV BAR */
+.navbar{
+background:#1b1f58;
+padding:15px;
+color:white;
+}
+
+.navbar a{
+color:white;
+margin-right:20px;
+text-decoration:none;
+font-weight:bold;
+}
+
 .wrapper{
 max-width:900px;
 margin:auto;
-margin-top:60px;
+margin-top:40px;
 background:white;
 display:flex;
 box-shadow:0 10px 30px rgba(0,0,0,0.1);
@@ -108,6 +118,12 @@ width:100%;
 
 <body>
 
+<!-- ✅ NAV BAR (THIS IS WHERE IT SHOULD BE) -->
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="dev-dashboard.html">Dev Dashboard</a>
+</div>
+
 <div class="wrapper">
 
 <div class="left">
@@ -142,11 +158,8 @@ marketing systems, and scaling opportunities.
 <h3>Your Details</h3>
 
 <input placeholder="Full Name" id="name">
-
 <input placeholder="Business Name" id="business">
-
 <input placeholder="Email Address" id="email">
-
 <input placeholder="Phone Number" id="phone">
 
 <p id="chosen"></p>
@@ -158,7 +171,6 @@ marketing systems, and scaling opportunities.
 </div>
 
 </div>
-
 
 <script>
 
@@ -173,19 +185,13 @@ const slots=document.getElementById("slots")
 times.forEach(t=>{
 
 let div=document.createElement("div")
-
 div.className="slot"
-
 div.innerText=t
 
 div.onclick=()=>{
-
 document.getElementById("form").style.display="block"
-
 document.getElementById("chosen").innerText="Selected: "+t
-
 localStorage.setItem("time",t)
-
 }
 
 slots.appendChild(div)
@@ -195,7 +201,6 @@ slots.appendChild(div)
 function submitBooking(){
 
 let booking={
-
 name:document.getElementById("name").value,
 business:document.getElementById("business").value,
 email:document.getElementById("email").value,
@@ -203,7 +208,6 @@ phone:document.getElementById("phone").value,
 date:document.getElementById("date").value,
 time:localStorage.getItem("time"),
 status:"Pending"
-
 }
 
 let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
