@@ -13,37 +13,49 @@ background:#f6f7fb;
 }
 
 .navbar{
-background:#1b1f58;
-padding:15px;
+background:#0f172a;
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .navbar a{
 color:white;
-margin-right:20px;
+margin-left:20px;
 text-decoration:none;
+font-weight:bold;
+}
+
+.logo{
+color:white;
+font-size:20px;
 font-weight:bold;
 }
 
 .hero{
 text-align:center;
-padding:100px 20px;
+padding:120px 20px;
 }
 
 .hero h1{
-font-size:40px;
+font-size:48px;
+margin-bottom:20px;
 }
 
 .hero p{
 color:#555;
-margin:20px 0;
+margin-bottom:30px;
+font-size:18px;
 }
 
 .btn{
-background:#1b1f58;
+background:#2563eb;
 color:white;
-padding:15px 25px;
+padding:15px 30px;
 text-decoration:none;
-border-radius:6px;
+border-radius:8px;
+font-weight:bold;
 }
 
 .section{
@@ -51,33 +63,42 @@ padding:60px 20px;
 text-align:center;
 }
 
-</style>
+.card{
+background:white;
+padding:30px;
+margin:20px;
+display:inline-block;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+width:250px;
+}
 
+</style>
 </head>
 
 <body>
 
 <div class="navbar">
-  <a href="index.html">Home</a>
-  <a href="booking.html">Book a Call</a>
-  <a href="dev-dashboard.html">Dev</a>
+  <div class="logo">HorizonBoost</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="booking.html">Book a Call</a>
+    <a href="dev-dashboard.html">Dev</a>
+  </div>
 </div>
 
 <div class="hero">
-
-<h1>Scale Your Business with HorizonBoost 🚀</h1>
-
-<p>We help businesses grow faster with proven strategies and systems.</p>
-
-<a href="index.html" class="btn">Book a Free Strategy Call</a>
-
+  <h1>Scale Your Business Faster 🚀</h1>
+  <p>We help you grow with proven systems, automation, and strategy.</p>
+  <a href="booking.html" class="btn">Book a Free Call</a>
 </div>
 
 <div class="section">
+  <h2>What We Offer</h2>
 
-<h2>What We Do</h2>
-
-<p>Marketing systems, automation, and growth strategies tailored for your business.</p>
+  <div class="card">Growth Strategy</div>
+  <div class="card">Marketing Systems</div>
+  <div class="card">Automation</div>
 
 </div>
 
