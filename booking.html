@@ -1,52 +1,46 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-<title>HorizonBoost | Book a Strategy Call</title>
-
+<title>Book a Call | HorizonBoost</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 body{
 font-family:Arial;
-background:#f6f7fb;
 margin:0;
+background:#f6f7fb;
 }
 
-/* NAV BAR */
 .navbar{
-background:#1b1f58;
-padding:15px;
-color:white;
+background:#0f172a;
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
 }
 
 .navbar a{
 color:white;
-margin-right:20px;
 text-decoration:none;
+margin-left:20px;
 font-weight:bold;
 }
 
 .wrapper{
 max-width:900px;
-margin:auto;
-margin-top:40px;
+margin:60px auto;
 background:white;
 display:flex;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
 border-radius:10px;
 overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
 .left{
 width:40%;
-background:#1b1f58;
+background:#0f172a;
 color:white;
 padding:40px;
-}
-
-.left h1{
-margin-top:0;
 }
 
 .right{
@@ -54,18 +48,15 @@ width:60%;
 padding:40px;
 }
 
-.date-picker{
-margin-bottom:20px;
-}
-
 .slot-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:10px;
+margin-top:10px;
 }
 
 .slot{
-border:1px solid #4b81e8;
+border:1px solid #2563eb;
 padding:12px;
 text-align:center;
 cursor:pointer;
@@ -73,44 +64,36 @@ border-radius:6px;
 }
 
 .slot:hover{
-background:#4b81e8;
+background:#2563eb;
 color:white;
 }
 
 .form{
-margin-top:20px;
 display:none;
+margin-top:20px;
 }
 
 input{
 width:100%;
 padding:10px;
 margin:8px 0;
+border-radius:6px;
 border:1px solid #ccc;
-border-radius:4px;
 }
 
 button{
-background:#1b1f58;
-color:white;
-padding:12px;
-border:none;
 width:100%;
+padding:12px;
+background:#2563eb;
+color:white;
+border:none;
 border-radius:6px;
 cursor:pointer;
+font-weight:bold;
 }
 
 button:hover{
-background:#4b81e8;
-}
-
-@media(max-width:800px){
-.wrapper{
-flex-direction:column;
-}
-.left,.right{
-width:100%;
-}
+background:#1e40af;
 }
 
 </style>
@@ -119,52 +102,48 @@ width:100%;
 <body>
 
 <div class="navbar">
-  <a href="index.html">Home</a>
-  <a href="booking.html">Book a Call</a>
-  <a href="dev-dashboard.html">Dev</a>
+  <div style="color:white;font-weight:bold;">HorizonBoost</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="booking.html">Book a Call</a>
+    <a href="dev-dashboard.html">Dev</a>
+  </div>
 </div>
 
 <div class="wrapper">
 
 <div class="left">
-
-<h1>HorizonBoost</h1>
-
+<h2>HorizonBoost</h2>
 <h3>1:1 Strategy Call</h3>
-
 <p>Duration: 45 Minutes</p>
-
-<p>
-We'll review your business and discuss growth strategies,
-marketing systems, and scaling opportunities.
-</p>
-
-<p><b>Timezone:</b> Eastern Time</p>
-
+<p>We’ll review your business and help you scale with proven strategies.</p>
 </div>
 
 <div class="right">
 
-<h2>Select a Date</h2>
+<h3>Select a Date</h3>
+<input type="date" id="date">
 
-<input type="date" id="date" class="date-picker">
-
-<h2>Select a Time</h2>
-
+<h3>Select a Time</h3>
 <div class="slot-grid" id="slots"></div>
 
 <div class="form" id="form">
 
 <h3>Your Details</h3>
 
-<input placeholder="Full Name" id="name">
-<input placeholder="Business Name" id="business">
-<input placeholder="Email Address" id="email">
-<input placeholder="Phone Number" id="phone">
+<form action="https://formspree.io/f/mzdkeegr" method="POST">
 
-<p id="chosen"></p>
+<input name="name" placeholder="Full Name" required>
+<input name="business" placeholder="Business Name" required>
+<input name="email" placeholder="Email Address" required>
+<input name="phone" placeholder="Phone Number" required>
 
-<button onclick="submitBooking()">Request Call</button>
+<input type="hidden" name="date" id="dateInput">
+<input type="hidden" name="time" id="timeInput">
+
+<button type="submit">Request Call</button>
+
+</form>
 
 </div>
 
@@ -173,6 +152,8 @@ marketing systems, and scaling opportunities.
 </div>
 
 <script>
+
+let selectedTime=""
 
 const times=[
 "9:00 AM","9:45 AM","10:30 AM","11:15 AM",
@@ -189,38 +170,18 @@ div.className="slot"
 div.innerText=t
 
 div.onclick=()=>{
+selectedTime=t
 document.getElementById("form").style.display="block"
-document.getElementById("chosen").innerText="Selected: "+t
-localStorage.setItem("time",t)
+document.getElementById("timeInput").value=t
 }
 
 slots.appendChild(div)
 
 })
 
-function submitBooking(){
-
-let booking={
-name:document.getElementById("name").value,
-business:document.getElementById("business").value,
-email:document.getElementById("email").value,
-phone:document.getElementById("phone").value,
-date:document.getElementById("date").value,
-time:localStorage.getItem("time"),
-status:"Pending"
-}
-
-let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
-
-bookings.push(booking)
-
-localStorage.setItem("bookings",JSON.stringify(bookings))
-
-alert("Your request has been sent!")
-
-location.reload()
-
-}
+document.getElementById("date").addEventListener("change", e=>{
+document.getElementById("dateInput").value=e.target.value
+})
 
 </script>
 
