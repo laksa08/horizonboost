@@ -6,17 +6,34 @@
 
 <style>
 
+/* 🌌 BACKGROUND */
 body{
 font-family:Arial;
 margin:0;
-background:#f6f7fb;
+background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+min-height:100vh;
 }
 
+/* 🔮 GLOW EFFECT */
+.bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background: radial-gradient(circle at 20% 30%, #2563eb, transparent 40%),
+            radial-gradient(circle at 80% 70%, #9333ea, transparent 40%);
+}
+
+/* 🔝 NAVBAR */
 .navbar{
-background:#0f172a;
+background:rgba(15,23,42,0.8);
 padding:15px 30px;
 display:flex;
 justify-content:space-between;
+align-items:center;
+backdrop-filter: blur(10px);
 }
 
 .navbar a{
@@ -26,16 +43,24 @@ margin-left:20px;
 font-weight:bold;
 }
 
+.logo{
+color:white;
+font-size:18px;
+font-weight:bold;
+}
+
+/* 📦 MAIN BOX */
 .wrapper{
 max-width:900px;
 margin:60px auto;
 background:white;
 display:flex;
-border-radius:10px;
+border-radius:12px;
 overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 20px 60px rgba(0,0,0,0.4);
 }
 
+/* LEFT PANEL */
 .left{
 width:40%;
 background:#0f172a;
@@ -43,15 +68,17 @@ color:white;
 padding:40px;
 }
 
+/* RIGHT PANEL */
 .right{
 width:60%;
 padding:40px;
 }
 
+/* TIME SLOTS */
 .slot-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:10px;
+gap:12px;
 margin-top:10px;
 }
 
@@ -60,14 +87,17 @@ border:1px solid #2563eb;
 padding:12px;
 text-align:center;
 cursor:pointer;
-border-radius:6px;
+border-radius:8px;
+transition:0.3s;
 }
 
 .slot:hover{
 background:#2563eb;
 color:white;
+transform:translateY(-2px);
 }
 
+/* FORM */
 .form{
 display:none;
 margin-top:20px;
@@ -75,25 +105,39 @@ margin-top:20px;
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin:8px 0;
-border-radius:6px;
+border-radius:8px;
 border:1px solid #ccc;
 }
 
+/* BUTTON */
 button{
 width:100%;
-padding:12px;
+padding:14px;
 background:#2563eb;
 color:white;
 border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
 font-weight:bold;
+transition:0.3s;
 }
 
 button:hover{
 background:#1e40af;
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* 📱 MOBILE */
+@media(max-width:800px){
+.wrapper{
+flex-direction:column;
+}
+.left,.right{
+width:100%;
+}
 }
 
 </style>
@@ -101,8 +145,10 @@ background:#1e40af;
 
 <body>
 
+<div class="bg"></div>
+
 <div class="navbar">
-  <div style="color:white;font-weight:bold;">HorizonBoost</div>
+  <div class="logo">HorizonBoost</div>
   <div>
     <a href="index.html">Home</a>
     <a href="booking.html">Book a Call</a>
@@ -115,8 +161,9 @@ background:#1e40af;
 <div class="left">
 <h2>HorizonBoost</h2>
 <h3>1:1 Strategy Call</h3>
-<p>Duration: 45 Minutes</p>
-<p>We’ll review your business and help you scale with proven strategies.</p>
+<p><b>Duration:</b> 45 Minutes</p>
+<p>We’ll review your business and help you scale with proven systems, marketing, and automation.</p>
+<p><b>Timezone:</b> Eastern Time</p>
 </div>
 
 <div class="right">
