@@ -278,13 +278,53 @@ loadBookings(); // refresh UI
 return;
 }
 
-// ✅ save booking
-await addDoc(collection(db, "bookings"), {
-date: date,
-time: selectedTime
+document.getElementById("bookingForm").addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+const date = document.getElementById("date").value;
+
+if(!selectedTime){
+alert("Select a time");
+return;
+}
+
+// check for double booking again
+const snapshot = await getDocs(collection(db, "bookings"));
+
+let taken = false;
+
+snapshot.forEach(doc=>{
+let data = doc.data();
+if(data.date === date && data.time === selectedTime){
+taken = true;
+}
 });
 
-// ✅ now submit to email (Formspree)
+if(taken){
+alert("Already booked");
+return;
+}
+
+// save to firebase
+await addDoc(collection(db, "bookings"), {
+date: date,
+time: selectedTime,
+status: "Pending"
+});
+
+// 🔔 DISCORD WEBHOOK
+await fetch(https://discord.com/api/webhooks/1499607403275096115/JFyjpmEmSBZejx1oq5va3ke7d1pgZ3_4ShtyDGKI-XjlIasl_XwrldOPin5iQI0Cfiyp, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+content: `🚀 New Booking!\n📅 ${date}\n⏰ ${selectedTime}`
+})
+});
+
+// submit form (send email)
 e.target.submit();
 
 });
