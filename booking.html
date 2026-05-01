@@ -248,16 +248,43 @@ loadBookings();
 });
 
 // Save booking
-document.getElementById("bookingForm").addEventListener("submit", async ()=>{
+document.getElementById("bookingForm").addEventListener("submit", async (e)=>{
 
+e.preventDefault(); // stop default form submit
+
+const date = document.getElementById("date").value;
+
+// 🚫 no time selected
+if(!selectedTime){
+alert("Please select a time first");
+return;
+}
+
+// 🔍 check AGAIN before saving (prevents double booking)
+const snapshot = await getDocs(collection(db, "bookings"));
+
+let alreadyBooked = false;
+
+snapshot.forEach(doc=>{
+let data = doc.data();
+if(data.date === date && data.time === selectedTime){
+alreadyBooked = true;
+}
+});
+
+if(alreadyBooked){
+alert("This time is already booked. Please choose another.");
+loadBookings(); // refresh UI
+return;
+}
+
+// ✅ save booking
 await addDoc(collection(db, "bookings"), {
-date: document.getElementById("date").value,
+date: date,
 time: selectedTime
 });
 
+// ✅ now submit to email (Formspree)
+e.target.submit();
+
 });
-
-</script>
-
-</body>
-</html>
