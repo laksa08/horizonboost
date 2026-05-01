@@ -1,123 +1,146 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<title>HorizonBoost Dev Dashboard</title>
+<title>Dev Dashboard | HorizonBoost</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 body{
 font-family:Arial;
-padding:40px;
-background:#f4f6fb;
+margin:0;
+background:#0f172a;
+color:white;
 }
 
-h1{
-margin-bottom:20px;
+.navbar{
+padding:15px 30px;
+background:#020617;
+display:flex;
+justify-content:space-between;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-background:white;
+.navbar a{
+color:white;
+text-decoration:none;
+margin-left:20px;
 }
 
-td,th{
-padding:10px;
-border:1px solid #ccc;
-text-align:left;
+.container{
+max-width:1000px;
+margin:40px auto;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+margin-bottom:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 button{
-padding:6px 10px;
-cursor:pointer;
-background:#1b1f58;
-color:white;
+background:#22c55e;
 border:none;
-border-radius:4px;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+color:white;
+font-weight:bold;
+}
+
+button:hover{
+background:#16a34a;
+}
+
+.status{
+font-size:14px;
+opacity:0.8;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<h1>HorizonBoost Dev Dashboard</h1>
+<div class="navbar">
+  <div>HorizonBoost Dev</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="booking.html">Booking</a>
+  </div>
+</div>
 
-<table>
+<div class="container">
+<h2>Bookings</h2>
+<div id="list"></div>
+</div>
 
-<thead>
-<tr>
-<th>Name</th>
-<th>Business</th>
-<th>Email</th>
-<th>Phone</th>
-<th>Date</th>
-<th>Time</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-</thead>
+<script type="module">
 
-<tbody id="table"></tbody>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-</table>
+const firebaseConfig = {
+  apiKey: "AIzaSyCsFshu5jFYa5rkdE9YBaRZSygBhN0rHXQ",
+  authDomain: "horizonboost-536ed.firebaseapp.com",
+  projectId: "horizonboost-536ed",
+  storageBucket: "horizonboost-536ed.firebasestorage.app",
+  messagingSenderId: "483833292439",
+  appId: "1:483833292439:web:aa633917567ac651c9ebd2"
+};
 
-<script>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-const DEV_EMAILS=["aw060554@gmail.com"]
+const list = document.getElementById("list");
 
-let email=prompt("Enter dev email")
+async function load(){
 
-if(!DEV_EMAILS.includes(email)){
-alert("Access denied")
-window.location="index.html"
-}
+list.innerHTML = "";
 
-const table=document.getElementById("table")
+const snapshot = await getDocs(collection(db, "bookings"));
 
-let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
+snapshot.forEach(docSnap=>{
 
-function render(){
+const b = docSnap.data();
 
-table.innerHTML=""
+const card = document.createElement("div");
+card.className = "card";
 
-bookings.forEach((b,i)=>{
+card.innerHTML = `
+<div>
+<strong>${b.date}</strong><br>
+${b.time}<br>
+<span class="status">${b.status || "Pending"}</span>
+</div>
 
-const row=`
-<tr>
-<td>${b.name}</td>
-<td>${b.business}</td>
-<td>${b.email}</td>
-<td>${b.phone}</td>
-<td>${b.date}</td>
-<td>${b.time}</td>
-<td>${b.status}</td>
-<td><button onclick="book(${i})">Mark Booked</button></td>
-</tr>
-`
+<button onclick="confirmBooking('${docSnap.id}')">Confirm</button>
+`;
 
-table.innerHTML+=row
+list.appendChild(card);
 
-})
-
-}
-
-function book(i){
-
-bookings[i].status="Booked"
-
-localStorage.setItem("bookings",JSON.stringify(bookings))
-
-render()
+});
 
 }
 
-render()
+window.confirmBooking = async function(id){
+
+const ref = doc(db, "bookings", id);
+
+await updateDoc(ref, {status:"Booked"});
+
+alert("Booking confirmed!");
+
+load();
+
+}
+
+load();
 
 </script>
 
 </body>
-
 </html>
