@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dev Dashboard | HorizonBoost</title>
+<title>HorizonBoost Dev Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -20,15 +20,10 @@ display:flex;
 justify-content:space-between;
 }
 
-.navbar a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-}
-
 .container{
 max-width:1000px;
 margin:40px auto;
+padding:20px;
 }
 
 .card{
@@ -55,9 +50,24 @@ button:hover{
 background:#16a34a;
 }
 
-.status{
-font-size:14px;
-opacity:0.8;
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+}
+
+.login-box{
+max-width:400px;
+margin:120px auto;
+background:#1e293b;
+padding:30px;
+border-radius:12px;
+}
+
+.hidden{
+display:none;
 }
 
 </style>
@@ -65,17 +75,33 @@ opacity:0.8;
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginPage" class="login-box">
+
+<h2>Dev Login</h2>
+
+<input type="email" id="email" placeholder="Enter Email">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
 <div class="navbar">
   <div>HorizonBoost Dev</div>
-  <div>
-    <a href="index.html">Home</a>
-    <a href="booking.html">Booking</a>
-  </div>
+  <button onclick="logout()">Logout</button>
 </div>
 
 <div class="container">
+
 <h2>Bookings</h2>
+
 <div id="list"></div>
+
+</div>
+
 </div>
 
 <script type="module">
@@ -83,6 +109,7 @@ opacity:0.8;
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCsFshu5jFYa5rkdE9YBaRZSygBhN0rHXQ",
   authDomain: "horizonboost-536ed.firebaseapp.com",
@@ -95,54 +122,107 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ✅ ALLOWED EMAILS
+const allowedEmails = [
+"aw060554@gmail.com"
+];
+
+// LOGIN
+window.login = function(){
+
+const email = document.getElementById("email").value;
+
+if(allowedEmails.includes(email)){
+
+localStorage.setItem("devLoggedIn", "true");
+
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
+
+loadDashboard();
+
+}else{
+alert("Access denied");
+}
+
+}
+
+// LOGOUT
+window.logout = function(){
+
+localStorage.removeItem("devLoggedIn");
+
+location.reload();
+
+}
+
+// AUTO LOGIN
+if(localStorage.getItem("devLoggedIn") === "true"){
+
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
+
+loadDashboard();
+
+}
+
+// DASHBOARD
+function loadDashboard(){
+
 const list = document.getElementById("list");
 
-// 🔔 SOUND ALERT
 const sound = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
 
 let firstLoad = true;
 
-// 🔴 REAL-TIME LISTENER
-onSnapshot(collection(db, "bookings"), (snapshot) => {
+onSnapshot(collection(db, "bookings"), (snapshot)=>{
 
 list.innerHTML = "";
 
-snapshot.forEach(docSnap => {
+snapshot.forEach(docSnap=>{
 
 const b = docSnap.data();
 
 const card = document.createElement("div");
+
 card.className = "card";
 
 card.innerHTML = `
 <div>
 <strong>${b.date}</strong><br>
 ${b.time}<br>
-<span class="status">${b.status || "Pending"}</span>
+Status: ${b.status || "Pending"}
 </div>
 
-<button onclick="confirmBooking('${docSnap.id}')">Confirm</button>
+<button onclick="confirmBooking('${docSnap.id}')">
+Confirm
+</button>
 `;
 
 list.appendChild(card);
 
 });
 
-// 🔔 play sound when NEW booking comes in
+// 🔔 ALERT
 if(!firstLoad){
 sound.play();
-alert("New booking received!");
+alert("🚀 New booking received!");
 }
 
 firstLoad = false;
 
 });
 
+}
+
+// CONFIRM BOOKING
 window.confirmBooking = async function(id){
 
 const ref = doc(db, "bookings", id);
 
-await updateDoc(ref, {status:"Booked"});
+await updateDoc(ref, {
+status: "Booked"
+});
 
 alert("Booking confirmed!");
 
